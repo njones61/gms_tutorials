@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="GMS Team" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>GMS Tutorials: MODFLOW – Grid Approach - GMS Tutorials</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../../stylesheets/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "GMS Tutorials: MODFLOW \u2013 Grid Approach";
+        var mkdocs_page_input_path = "modflow/grid/MODFLOW-GridApproach_with_correct_images.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/markdown.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> GMS Tutorials
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">MODFLOW</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../MODFLOW-GridApproach/">Grid Approach</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">GMS Tutorials</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">GMS Tutorials: MODFLOW – Grid Approach</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/yourusername/gms_tutorials/edit/master/docs/modflow/grid/MODFLOW-GridApproach_with_correct_images.md">Edit on gms_tutorials</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="gms-tutorials-modflow-grid-approach">GMS Tutorials: MODFLOW – Grid Approach<a class="headerlink" href="#gms-tutorials-modflow-grid-approach" title="Permanent link">&para;</a></h1>
+<p>Introduction</p>
+<p>Two approaches can be used to construct a MODFLOW simulation in GMS: the grid approach and the conceptual model approach. The grid approach involves working directly with the 3D grid to apply sources/sinks and other model parameters on a cell-by-cell basis. The conceptual model approach involves using the GIS tools in the Map module to develop a conceptual model of the site being modeled. The data in the conceptual model are then copied to the grid. The grid approach to MODFLOW pre-processing is described in this tutorial.</p>
+<p>In most cases, the conceptual model approach is more efficient than the grid approach. However, the grid approach is useful for simple problems or academic exercises where cell-by-cell editing is necessary. Completing this tutorial is not required before beginning the conceptual model tutorials.</p>
+<p>This tutorial uses a modified version of the sample problem (Figure 1) described near the end of the MODFLOW Reference Manual. Three aquifers will be simulated using three layers in the computational grid. The grid covers a square region measuring 75000 feet by 75000 feet.</p>
+<p>The grid will consist of 15 rows and 15 columns, each cell measuring 5000 feet by 5000 feet in plan view. For simplicity, the elevation of the top and bottom of each layer will be flat. The hydraulic conductivity values shown are for the horizontal direction. For the vertical direction, the tutorial will use some fraction of the horizontal hydraulic conductivity.</p>
+<p>Flow into the system is due to infiltration from precipitation and is defined as recharge in the input. Flow out of the system is due to buried drain tubes, discharging wells (not shown on the diagram), and a lake, which is represented by a constant head boundary on the left. Starting heads will be set equal to zero, and a steady state solution will be computed.</p>
+<p><img alt="Figure 1" src="../images/image1.png" /></p>
+<p>Figure 1      Sample problem to be solved</p>
+<p>This tutorial discusses and demonstrates the following:</p>
+<p>Creating a 3D grid</p>
+<p>Setting up a MODFLOW simulation</p>
+<p>Checking the simulation and running MODFLOW</p>
+<p>Assigning zone budgets</p>
+<p>Viewing the report</p>
+<p>Getting Started</p>
+<p>Do as follows to get started:</p>
+<p>If necessary, launch GMS.</p>
+<p>If GMS is already running, select File | New command to ensure that the program settings are restored to their default state.</p>
+<p>Units</p>
+<p>First, define the units used in the model. The units chosen will be applied to edit fields in the GMS interface as a reminder of the proper units for each parameter.</p>
+<p>Select Edit | Units… to bring up the Units dialog.</p>
+<p>Click the  button next to the Length field to bring up the Display Projection dialog.</p>
+<p>Select “Meters” from the Units drop-down in both the Horizontal and Vertical sections.</p>
+<p>Click OK to close the Display Projection dialog.</p>
+<p>Select “d” (for days) from the Time drop-down. Ignore the other units as they are not used for flow simulations.</p>
+<p>Click OK to exit the Units dialog.</p>
+<p>Creating the Grid</p>
+<p>The first step in solving the problem is to create the 3D finite difference grid.</p>
+<p>In the Project Explorer, right-click on the empty space and select New | 3D Grid… to bring up the Create Finite Difference Grid dialog.</p>
+<p>In both the X-Dimension and Y-Dimension sections, enter “22860.0” for Length and “15” for Number cells.</p>
+<p>In the Z-Dimension section, enter “3” for Number cells.</p>
+<p>The top and bottom elevations will be entered later for each layer of the grid. Thus, the thickness of the cells in the z directions entered here will not affect the MODFLOW computations.</p>
+<p>Click OK to close the Create Finite Difference Grid dialog.</p>
+<p>The grid should appear in the window in plan view. A simplified representation of the grid should also appear in the Mini-Grid Toolbar (Figure 2).</p>
+<p><img alt="Figure 2" src="../images/image2.png" /></p>
+<p>Figure 2      Mini-Grid toolbar</p>
+<p>Creating the MODFLOW Simulation</p>
+<p>The next step is to initialize the MODFLOW simulation.</p>
+<p>Packages</p>
+<p>In the Project Explorer, right-click on “ grid” and select New MODFLOW… to bring up the MODFLOW Global/Basic Package dialog.</p>
+<p>First, select the packages. The input to MODFLOW is subdivided into packages. Some of the packages are optional and some are required. The Global and Basic packages are both always required, and are therefore always active. There are no settings to turn them on or off.</p>
+<p>Click Packages… to bring up the MODFLOW Packages / Processes dialog.</p>
+<p>This dialog specifies which of the optional packages will be used to set up the model. To select the optional packages, do as follows:</p>
+<p>In the Solver section, select the SIP1 – Stongly Impl. Proc.</p>
+<p>In the Optional packages / processes section, turn on DRN1 – Drain, RCH1 – Recharge, and WEL1 – Well.</p>
+<p>Click OK to exit the MODFLOW Packages / Processes dialog.</p>
+<p>Do not close the MODFLOW Global/Basic Package dialog.</p>
+<p>The IBOUND Array</p>
+<p>The next step is to set up the IBOUND array. The IBOUND array is used to designate each cell as either active (IBOUND &gt; 0), inactive (IBOUND = 0), or constant head (IBOUND &lt; 0). For this problem, all cells will be active, except for the first two layers in the leftmost column, which will be designated as constant head.</p>
+<p>Click IBOUND… to bring up the IBOUND Array dialog.</p>
+<p>The values of the IBOUND array are displayed here in a spreadsheet-like fashion, one layer at a time. The edit field in the upper left corner of the dialog can be used to change the current layer. For this problem, all of the values in the array need to be greater than zero, except for the left column of the top two layers, which should be less than zero.</p>
+<p>By default, the values in the array should already be greater than zero. Therefore, changing the values for the constant head cells is all that needs to be done. This can be accomplished by entering a value of “-1” for each of the thirty constant head cells.</p>
+<p>However, there is another way to edit the IBOUND array that is much simpler for this case. This method will be described later in the tutorial. For now, leave all of the cells active.</p>
+<p>Click Cancel to exit the IBOUND Array dialog.</p>
+<p>Top and Bottom Elevations</p>
+<p>The next step is to set up the top and bottom elevation arrays.</p>
+<p>Click Top Elevation… to bring up the Top Elevation dialog.</p>
+<p>Enter “1” for the Layer.</p>
+<p>Click Constant → Layer… to bring up the Layer Value dialog.</p>
+<p>Enter “60.0” for the Constant value for layer, and click OK to close the Layer Value dialog.</p>
+<p>Click OK to exit the Top Elevation dialog.</p>
+<p>GMS forces the top of a layer to be at the same location as the bottom of the layer above. Thus, it is only necessary to enter the bottom elevations of all the layers now and the tops of the layers will be set automatically.</p>
+<p>Click Bottom Elevation… to bring up the Bottom Elevation dialog.</p>
+<p>Enter “1” for the Layer.</p>
+<p>Click Constant → Layer… to bring up the Layer Value dialog.</p>
+<p>Enter “-45.0” for the Constant value for layer, and click OK to close the Layer Value dialog.</p>
+<p>Enter “2” for the Layer.</p>
+<p>Click Constant → Layer… to bring up the Layer Value dialog.</p>
+<p>Enter “-120.0” for the Constant value for layer, and click OK to close the Layer Value dialog.</p>
+<p>Enter “3” for the Layer.</p>
+<p>Click Constant → Layer… to bring up the Layer Value dialog.</p>
+<p>Enter “-215.0” for the Constant value for layer, and click OK to close the Layer Value dialog.</p>
+<p>Click OK to exit the Bottom Elevation dialog.</p>
+<p>Turn on Starting heads equal grid top elevation near the bottom of the dialog.</p>
+<p>Click OK to exit the MODFLOW Global/Basic Package dialog.</p>
+<p>Starting Heads</p>
+<p>The starting heads array is used to establish an initial head value when performing a transient simulation. Since this project is computing a steady state simulation, the initial head for each cell shouldn't make a difference in the final solution.</p>
+<p>However, the closer the starting head values are to the final head values, the more quickly MODFLOW will converge to a solution. Furthermore, for certain types of layers, if the starting head values are too low, MODFLOW may interpret the cells as being dry. For the problem at hand, the initial values are set to “60” because Starting heads equal grid top elevation is turned on in the MODFLOW Global/Basic Package dialog.</p>
+<p>The starting heads array is also used to establish the head values associated with constant head cells. For this problem, the constant head values should be zero. Since all of the starting head values are already “60” by default, it will be necessary to make these changes later in the tutorial.</p>
+<p>Assigning IBOUND Values Directly to Cells</p>
+<p>As mentioned above, the IBOUND values can be entered through the IBOUND Array dialog. In some cases, it is easier to assign values directly to cells. This can be accomplished by editing the properties of the cells. Before using the command, it is necessary to first select the cells in the leftmost column of the top two layers.</p>
+<p>Viewing the Left Column</p>
+<p>To simplify the selection of the cells, change the display to make the leftmost layer visible.</p>
+<p>Turn on Ortho Mode .</p>
+<p>Switch to Side View .</p>
+<p>The grid appears very thin. To make things easier, increase the Z magnification so that the grid appears stretched in the vertical direction:</p>
+<p>Click Display Options  to bring up the Display Options dialog.</p>
+<p>Enter “15.0” for the Z magnification and click OK to close the Display Options dialog.</p>
+<p>Selecting the Cells</p>
+<p>Do the following to select the cells:</p>
+<p>Make sure Ortho Mode  is still on and select the Select Cells  tool so the Mini-Grid Toolbar appears</p>
+<p>Enter “1” in the Mini-Grid Toolbar and press the Tab key.</p>
+<p>Notice column number one (the leftmost column) is now shown.</p>
+<p>Drag a box around all of the cells in the top two layers of the grid to highlight them (Figure 3).</p>
+<p><img alt="Figure 3" src="../images/image3.png" /></p>
+<p>Figure 3      Highlight the first two layers</p>
+<p>Changing the IBOUND Value</p>
+<p>To edit the IBOUND value:</p>
+<p>Right-click on one of the selected cells and select Properties… to bring up the 3D Grid Cell Properties dialog.</p>
+<p>Select “Specified Head” from the drop-down in the Value column of the IBOUND row.</p>
+<p>Enter “0.0” in the Value column of the Starting head row.</p>
+<p>Click OK to exit the 3D Grid Cell Properties dialog.</p>
+<p>Switch to Plan View .</p>
+<p>Notice that an orange diamond symbol is displayed in the cells that were edited, indicating they are constant head cells (Figure 4).</p>
+<p><img alt="Figure 4" src="../images/image4.png" /></p>
+<p>Figure 4      Constant head cells marked on the left</p>
+<p>5.4     Checking the Values</p>
+<p>To ensure that the IBOUND values were entered correctly:</p>
+<p>Select MODFLOW | Global Options… to bring up the MODFLOW Global/Basic Package dialog.</p>
+<p>Click IBOUND… button to bring up the IBOUND Array dialog.</p>
+<p>Choose the up arrow to the right of the layer field in the upper left corner of the dialog to cycle through the layers.</p>
+<p>Note that the cells in the leftmost column in the top two layers all have a value of “-1”. Most of the MODFLOW input data can be edited in GMS using either a spreadsheet dialog such as this one, or by selecting a set of cells and entering a value directly.</p>
+<p>Click Cancel to exit the IBOUND Array dialog.</p>
+<p>Click Cancel to exit the MODFLOW Global/Basic Package dialog.</p>
+<p>The LPF Package</p>
+<p>The next step is to enter the data for the Layer Property Flow (LPF) package. The LPF package computes the conductance between each of the grid cells and sets up the finite difference equations for the cell-to-cell flow.</p>
+<p>To enter the LPF data:</p>
+<p>Select MODFLOW | LPF – Layer Property Flow… to bring up the LPF Package dialog.</p>
+<p>In the Layer data section, enter “1” for the Layer.</p>
+<p>The options in the Layer data section are used to define the layer type and hydraulic conductivity data for each layer. This problem has three layers. The top layer is unconfined, and the bottom two layers are confined. The default Layer type in GMS is Convertible, which means the layer can be confined or unconfined. Thus, it isn’t necessary to change the layer types.</p>
+<p>The buttons on the right side of the Layer Data section are for entering the parameters necessary for computing the cell-to-cell conductances. MODFLOW requires a set of parameters for each layer depending on the layer type.</p>
+<p>Top Layer</p>
+<p>First, enter the data for the top layer:</p>
+<p>Click Horizontal Hydraulic Conductivity… to bring up the Horizontal Hydraulic Conductivity dialog.</p>
+<p>Click Constant → Layer to bring up the Layer Value dialog.</p>
+<p>Enter a value of “15.0” for the Constant value for layer and click OK to close the Layer Value dialog.</p>
+<p>Click OK to exit the Horizontal Hydraulic Conductivity dialog.</p>
+<p>Click Vertical Anisotropy (Kh/Kv)… to bring up the Vertical Anisotropy (Kh/Kv) dialog.</p>
+<p>Click Constant → Layer… to bring up the Layer Value dialog.</p>
+<p>Enter “10.0” for the Constant value for layer and click OK to close the Layer Value dialog.</p>
+<p>Click OK to exit the Vertical Anisotropy (Kh/Kv) dialog.</p>
+<p>Middle Layer</p>
+<p>Next, enter the data for the middle layer:</p>
+<p>In the Layer data section, enter “2” for the Layer.</p>
+<p>Repeat steps 1–8 from section 6.1, entering “0.9” for the Constant value for layer for the horizontal hydraulic conductivity and “5.0” for the Constant value for layer for the vertical anisotropy.</p>
+<p>Bottom Layer</p>
+<p>Finally, enter the data for the bottom layer:</p>
+<p>In the Layer data section, enter “3” for the Layer.</p>
+<p>Repeat steps 1–8 from section 6.1, entering “2.0” for the Constant value for layer for the horizontal hydraulic conductivity and “5.0” for the Constant value for layer for the vertical anisotropy.</p>
+<p>When done, click OK to close the LPF Package dialog.</p>
+<p>The Recharge Package</p>
+<p>Entering data in the recharge package allows simulation of the recharge to an aquifer due to rainfall and infiltration.</p>
+<p>To enter the recharge data, do the following:</p>
+<p>Select MODFLOW | Optional Packages | RCH – Recharge… to bring up the MODFLOW Recharge Package dialog.</p>
+<p>Click Constant → Array to bring up the Grid Value dialog.</p>
+<p>Enter “0.0009” for the Constant value for grid and click OK to close the Grid Value dialog.</p>
+<p>Click OK to exit the MODFLOW Recharge Package dialog.</p>
+<p>The Drain Package</p>
+<p>The next step is to define the row of drains in the top layer of the model. To define the drains, first select the cells where the drains will be located, and then select the Point Sources/Sinks command.</p>
+<p>The drains are located in the top layer (layer 1). Since this is the current layer, it isn’t necessary to change the view.</p>
+<p>Notice that as the cursor moves across the grid, the IJK indices of the cell beneath the cursor are displayed in the Edit Window at the bottom of the screen (Figure 5, bottom).</p>
+<p><img alt="Figure 5" src="../images/image5.wmf" /></p>
+<p>Figure 5      Cells to be selected (top) and IJK indices of cell under cursor (bottom)</p>
+<p>To select the cells, do the following:</p>
+<p>Using the Select Cells  tool while holding down the Shift key, draw a box selecting cells 2–10 on row 8 (Figure 5, top). The first cell will indicate “IJK: 8,2,1”, meaning “row 8, cell 2, layer 1” (Figure 5, bottom).</p>
+<p>To assign drains to the cells:</p>
+<p>Right-click on one of the selected cells and select Sources/Sinks… to bring up the MODFLOW Sources/Sinks dialog.</p>
+<p>Select “Drain (DRN)” from the list on the left.</p>
+<p>Click Add BC to add a new instance of a drain to each of the selected cells.</p>
+<p>At this point, enter an elevation and a conductance for the selected drains. The drains all have the same conductance but the elevations are not all the same.</p>
+<p>Enter the following values in the Elevation (m) and Conductance (m^2/d) columns in the list of drains:</p>
+<p>Click OK to close the MODFLOW Sources/Sinks dialog.</p>
+<p>Deselect the cells by clicking anywhere outside the grid.</p>
+<p>The drains should now be marked by green circles (Figure 6).</p>
+<p><img alt="Figure 6" src="../images/image6.png" /></p>
+<p>Figure 6      Location of drain cells (green circles)</p>
+<p>The Well Package</p>
+<p>Several wells need to be defined. Most of the wells are in the top layer but some are in the middle and bottom layers.</p>
+<p>Top Layer Wells</p>
+<p>Define the wells in the top layer (layer 1) first:</p>
+<p>Using the Select Cells  tool while holding down the Ctrl key, select the cells shown in <img alt="Figure 7" src="../images/image7.jpeg" /></p>
+<p>Figure 7 (the twelve cells containing yellow squares, rows indicated by red arrows). The coordinates of each well are shown in the table to the right.</p>
+<p>Right-click on a selected cell and select Sources/Sinks… to bring up the MODFLOW Sources/Sinks dialog.</p>
+<p>Select “Wells (WEL)” from the list on the left and click the Add BC button. Twelve well entries will appear in the spreadsheet area on the right side of the dialog.</p>
+<p>In the All row, enter “-12230” in the Q (flow) (m^3/d) column.</p>
+<p>A negative value signifies extraction.</p>
+<p>Click OK to close the MODFLOW Sources/Sinks dialog.</p>
+<p>Deselect the cells by clicking anywhere outside the grid.</p>
+<p><img alt="Figure 7" src="../images/image7.jpeg" /></p>
+<p>Figure 7      Rows with wells (twelve yellow squares)</p>
+<p>Middle Layer Wells</p>
+<p>The wells in the middle layer (layer 2) need to be defined next. First, it is necessary to view the middle layer.</p>
+<p>Click the Up arrow  in the Mini-Grid Toolbar switch to layer 2.</p>
+<p>Using the Select Cells  tool while holding down the Ctrl key, select the cells shown in <img alt="Figure 8" src="../images/image8.png" /></p>
+<p>Figure 8 (the two cells containing yellow squares, indicated by red arrows). The coordinates of each well are shown in the table to the right.</p>
+<p>Right-click on a selected cell and select Sources/Sinks… to bring up the MODFLOW Sources/Sinks dialog.</p>
+<p>Select “Wells (WEL)” from the list on the left and click the Add BC button. Two well entries will appear in the spreadsheet area on the right side of the dialog.</p>
+<p>In the All row, enter “-12230” in the Q (flow) (m^3/d) column.</p>
+<p>Click OK to close the MODFLOW Sources/Sinks dialog.</p>
+<p>Unselect the cells by clicking anywhere outside the grid.</p>
+<p><img alt="Figure 8" src="../images/image8.png" /></p>
+<p>Figure 8      Well locations</p>
+<p>Bottom Layer Wells</p>
+<p>Finally, define a single well on the bottom layer (layer 3):</p>
+<p>Click the Up arrow  in the Mini-Grid Toolbar to switch to layer 3.</p>
+<p>Using the Select Cells  tool, select the cell shown in <img alt="Figure 9" src="../images/image9.png" /></p>
+<p>Figure 9 (indicated by red arrow). The coordinates of the well are “IJK: 5, 11, 3”.</p>
+<p>Right-click on the selected cell and select Sources/Sinks… to bring up the MODFLOW Sources/Sinks dialog.</p>
+<p>Select “Wells (WEL)” from the list on the left and click the Add BC button. One well entry will appear in the spreadsheet area on the right side of the dialog.</p>
+<p>Enter “-0.15” in the Q (flow) (m^3/d) column.</p>
+<p>Click OK to close the MODFLOW Sources/Sinks dialog.</p>
+<p>Unselect the cell by clicking anywhere outside the grid.</p>
+<p><img alt="Figure 9" src="../images/image9.png" /></p>
+<p>Figure 9      Location of the single well in layer 3</p>
+<p>Now that all of the wells have been defined, it is possible to go back to the top layer.</p>
+<p>Click the down arrow  twice in the Mini-Grid Toolbar to go back to layer 1.</p>
+<p>Checking and Saving the Simulation</p>
+<p>At this point, the MODFLOW data is completely defined and ready for the simulation run. Because of the significant amount of data required for a MODFLOW simulation, it is easy to omit some of the required data or to define inconsistent or incompatible options and parameters. Such errors will either cause MODFLOW to crash or to generate an erroneous solution. Before saving the simulation and running MODFLOW, always run the MODFLOW Model Checker and check for errors.</p>
+<p>The purpose of the Model Checker is to analyze the input data currently defined for a MODFLOW simulation and report any obvious errors or potential problems. However, running the Model Checker successfully does not guarantee that a solution will be correct. It simply serves as an initial check on the input data and can save a considerable amount of time that would otherwise be lost tracking down input errors.</p>
+<p>Do the following to run the Model Checker:</p>
+<p>Select MODFLOW | Check Simulation… to bring up the Model Checker dialog.</p>
+<p>Click Run Check to initiate the model check.</p>
+<p>A list of messages is shown for each of the MODFLOW input packages. If everything has been done correctly, the packages should have no errors. When an error exists, select the error in the Model Checker and GMS will select the cells or layers associated with the problem.</p>
+<p>When finished reviewing the results of the model check, click Done to exit the Model Checker.</p>
+<p>Select File | Save As… to bring up the Save As dialog.</p>
+<p>Browse to the modfgrid directory.</p>
+<p>Select “Project Files (*.gpr)” from the Save as type drop-down.</p>
+<p>Enter “gridmod.gpr” as the File name and click Save to save the project and close the Save As dialog.</p>
+<p>Running MODFLOW</p>
+<p>It is now possible to run MODFLOW:</p>
+<p>Select MODFLOW | Run MODFLOW to bring up the MODFLOW model wrapper dialog.</p>
+<p>The super file name is passed to MODFLOW as a command line argument. MODFLOW opens the file and begins the simulation. As the simulation proceeds, some text output in the window will report the solution progress.</p>
+<p>When MODFLOW finishes, turn on Read solution on exit and Turn on contours (if not on already).</p>
+<p>Click Close to exit the MODFLOW model wrapper dialog.</p>
+<p>Viewing the Solution</p>
+<p>GMS imports the solution automatically when the MODFLOW window is closed. At this point, a set of head contours for the top layer should be seen. Some cells containing a light blue triangle symbol will also be visible (top right in Figure 10). These cells are flooded, meaning the computed water table is above the top of the cell.</p>
+<p>Click Display Options  to bring up the Display Options dialog.</p>
+<p>Select “3D Grid Data” from the list on the left.</p>
+<p>On the MODFLOW tab, click on the blue triangle button to the left of Flooded cells to bring up the Symbol Attributes dialog.</p>
+<p>Click the down-arrow button next to Color and select “Skyblue” from the list of colors.</p>
+<p>Click OK to close the Symbol Attributes dialog.</p>
+<p>Click OK to close the Display Options dialog.</p>
+<p><img alt="Figure 10" src="../images/image10.png" /></p>
+<p>Figure 10      Contours, with flooded cells at top right</p>
+<p>Changing Layers</p>
+<p>View the solutions on the middle and bottom layers by doing the following:</p>
+<p>Click the up arrow  in the Mini-Grid Toolbar to go to layer 2 (one click) or layer 3 (two clicks).</p>
+<p>When finished viewing the middle and bottom layer solutions, use the down arrow  to return to layer 1.</p>
+<p>Color Fill Contours and Color Legend</p>
+<p>It is also possible to display the contours using a color fill option.</p>
+<p>Select Display | Contour Options… to bring up the Dataset Contour Options – 3D Grid – Head dialog.</p>
+<p>In the Contour method section, select “Color Fill” from the top drop-down.</p>
+<p>At the bottom left, turn on Legend.</p>
+<p>Click OK to close the Dataset Contour Options – 3D Grid – Head dialog.</p>
+<p>The Graphics Window should appear similar to Figure 11.</p>
+<p><img alt="Figure 11" src="../images/image11.png" /></p>
+<p>Figure 11      Color fill contours with a legend</p>
+<p>Zone Budget</p>
+<p>Zone Budget is a program developed by the U.S. Geological Survey (USGS) to compute subregional water budgets for MODFLOW groundwater flow models. GMS has incorporated a similar flow budget reporting tool. In GMS, zones are defined by assigning a Zone Budget ID to cells. Once the zones are defined, a report can be generated that shows the flow budget for the zone. The report also includes a component that shows the flow in and out to adjacent zones.</p>
+<p>Assigning Zone Budget IDs</p>
+<p>In this model, make each layer into a zone.</p>
+<p>Switch to Plan View .</p>
+<p>Use the up  or down  arrows on the Mini-Grid Toolbar to switch to layer 2 of the grid.</p>
+<p>Using the Select Cells  tool, drag a box around all of the cells in layer 2 of the grid.</p>
+<p>Right-click on one of the selected cells and select Properties… to bring up the 3D Grid Cell Properties dialog.</p>
+<p>Enter “2” for the Zone budget ID.</p>
+<p>Click OK to close the 3D Grid Cell Properties dialog.</p>
+<p>Use the Mini-Grid Toolbar to switch to layer 3 of the grid.</p>
+<p>Repeat steps 3 through 6, entering “3” for the Zone budget ID.</p>
+<p>Viewing the Zone Budget Report</p>
+<p>It is now possible to view the flow budget for each of the zones.</p>
+<p>Select MODFLOW | Flow Budget… to bring up the Flow Budget dialog.</p>
+<p>Switch to the Zones tab.</p>
+<p>Currently, the report is showing information for the first zone (the top layer of the grid). The report is divided into two sections: flow into the zone and flow out of the zone. Every source/sink present in the model is listed in the report with a flow value. In addition to the sources/sinks, there is a field for the amount of flow that goes between zones.</p>
+<p>View the reports for the other two zones by selecting the desired zone from the Zone drop-down.</p>
+<p>When finished, click OK to exit the Flow Budget dialog.</p>
+<p>Conclusion</p>
+<p>This concludes the “MODFLOW – Grid Approach” tutorial. The following topics were discussed and demonstrated:</p>
+<p>It is possible to specify which units are being used and GMS will display the units next to input fields to help input the appropriate value. GMS does not do any unit conversions.</p>
+<p>The desired MODFLOW packages for use in the model can be selected by choosing the MODFLOW | Global Options… command and clicking the Packages… button.</p>
+<p>Most MODFLOW array data can be edited in two ways: via a spreadsheet or by selecting grid cells and using the MODFLOW | Advanced | Cell Properties… command.</p>
+<p>Wells, drains, etc. can be created and edited by selecting the grid cell(s) and choosing the MODFLOW | Advanced | Sources/Sinks… command or by right-clicking on a selected cell and selecting the Sources/Sinks… command from the pop up menu.</p>
+<p>The Model Checker can be used to analyze the input data and check for errors.</p>
+<p>A flow budget report can be generated for a sub-region of the model by assigning Zone budget IDs to the grid and then using the Flow Budget command.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/yourusername/gms_tutorials" class="fa fa-code-fork" style="color: #fcfcfc"> gms_tutorials</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../javascripts/extra.js"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+site_name: GMS Tutorials
+site_description: Groundwater Modeling System Tutorials
+site_author: GMS Team
+
+# Repository
+repo_name: gms_tutorials
+repo_url: https://github.com/yourusername/gms_tutorials
+
+# Theme
+theme:
+  name: readthedocs
+  highlightjs: true
+  hljs_languages:
+    - python
+    - bash
+    - yaml
+    - markdown
+
+# Navigation
+nav:
+  - Home: index.md
+  - MODFLOW:
+    - Grid Approach: modflow/grid/MODFLOW-GridApproach.md
+
+# Plugins
+plugins:
+  - search
+
+# Extra CSS and JS
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/extra.js
+
+# Markdown extensions
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - meta
+  - toc:
+      permalink: true
