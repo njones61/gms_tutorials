@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# MkDocs build output
+site/
+
+# Word temp files
+~$*.docx
+
+# Python
+__pycache__/
+*.pyc
+
+# Claude Code
+.claude/
