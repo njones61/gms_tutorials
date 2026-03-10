@@ -4,6 +4,8 @@
 
 Build a MODFLOW model on a 3D grid
 
+![alt text](images/figure11.png)
+
 ## Objectives
 
 The grid approach to MODFLOW pre-processing is described in this tutorial. In most cases, the conceptual model approach is more powerful than the grid approach. However, the grid approach is useful for simple problems or academic exercises where cell-by-cell editing is necessary.
@@ -43,7 +45,7 @@ This tutorial discusses and demonstrates the following:
 Do as follows to get started:
 
 1. If necessary, launch GMS.
-2. If GMS is already running, select *File* | *New* command to ensure that the program settings are restored to their default state.
+2. If GMS is already running, select *File* | **New** command to ensure that the program settings are restored to their default state.
 
 ---
 
@@ -54,9 +56,9 @@ First, define the units used in the model. The units chosen will be applied to e
 1. Select *Edit* | **Units...** to bring up the Units dialog.
 2. Click the **...** button next to the Length field to bring up the Display Projection dialog.
 3. Select "Meters" from the Units drop-down in both the Horizontal and Vertical sections.
-4. Click OK to close the Display Projection dialog.
+4. Click **OK** to close the Display Projection dialog.
 5. Select "d" (for days) from the Time drop-down. Ignore the other units as they are not used for flow simulations.
-6. Click OK to exit the Units dialog.
+6. Click **OK** to exit the Units dialog.
 
 ---
 
@@ -64,13 +66,13 @@ First, define the units used in the model. The units chosen will be applied to e
 
 The first step in solving the problem is to create the 3D finite difference grid.
 
-1. In the Project Explorer, right-click on the empty space and select *New* | *3D Grid...* to bring up the Create Finite Difference Grid dialog.
+1. In the Project Explorer, right-click on the empty space and select *New* | **3D Grid...** to bring up the Create Finite Difference Grid dialog.
 2. In both the X-dimension and Y-dimension sections, enter "22860.0" for Length and "15" for Number of cells.
 3. In the Z-dimension section, enter "3" for Number of cells.
 
 The top and bottom elevations will be entered later for each layer of the grid. Thus, the thickness of the cells in the z directions entered here will not affect the MODFLOW computations.
 
-4. Click OK to close the Create Finite Difference Grid dialog.
+4. Click **OK** to close the Create Finite Difference Grid dialog.
 
 The grid should appear in the window in plan view. A simplified representation of the grid should also appear in the Mini-Grid Toolbar (Figure 2).
 
@@ -86,7 +88,7 @@ The next step is to initialize the MODFLOW simulation.
 
 ### 4.1 Packages
 
-1. In the Project Explorer, right-click on "grid" and select **New MODFLOW...** to bring up the MODFLOW Global/Basic Package dialog.
+1. In the Project Explorer, right-click on "grid" ![alt text](../../icons/3dgrid_module.png) and select **New MODFLOW...** to bring up the MODFLOW Global/Basic Package dialog.
 
 First, select the packages. The input to MODFLOW is subdivided into packages. Some of the packages are optional and some are required. The Global and Basic packages are both always required, and are therefore always active. There are no settings to turn them on or off.
 
@@ -96,7 +98,7 @@ This dialog specifies which of the optional packages will be used to set up the 
 
 3. In the Solver section, select the SIP1 -- Stongly Impl. Proc.
 4. In the Optional packages / processes section, turn on DRN1 -- Drain, RCH1 -- Recharge, and WEL1 -- Well.
-5. Click OK to exit the MODFLOW Packages / Processes dialog.
+5. Click **OK** to exit the MODFLOW Packages / Processes dialog.
 
 Do not close the MODFLOW Global/Basic Package dialog.
 
@@ -112,33 +114,33 @@ By default, the values in the array should already be greater than zero. Therefo
 
 However, there is another way to edit the IBOUND array that is much simpler for this case. This method will be described later in the tutorial. For now, leave all of the cells active.
 
-2. Click Cancel to exit the IBOUND Array dialog.
+2. Click **Cancel** to exit the IBOUND Array dialog.
 
 ### 4.3 Top and Bottom Elevations
 
 The next step is to set up the top and bottom elevation arrays.
 
-1. Click *Top Elevation...* to bring up the Top Elevation dialog.
+1. Click **Top Elevation...** to bring up the Top Elevation dialog.
 2. Enter "1" for the Layer.
-3. Click *Constant* &rarr; **Layer...** to bring up the Layer Value dialog.
-4. Enter "60.0" for the Constant value for layer, and click OK to close the Layer Value dialog.
-5. Click OK to exit the Top Elevation dialog.
+3. Click **Constant** &rarr; **Layer...** to bring up the Layer Value dialog.
+4. Enter "60.0" for the Constant value for layer, and click **OK** to close the Layer Value dialog.
+5. Click **OK** to exit the Top Elevation dialog.
 
 GMS forces the top of a layer to be at the same location as the bottom of the layer above. Thus, it is only necessary to enter the bottom elevations of all the layers now and the tops of the layers will be set automatically.
 
-6. Click *Bottom Elevation...* to bring up the Bottom Elevation dialog.
+6. Click **Bottom Elevation...** to bring up the Bottom Elevation dialog.
 7. Enter "1" for the Layer.
-8. Click *Constant* &rarr; **Layer...** to bring up the Layer Value dialog.
-9. Enter "-45.0" for the Constant value for layer, and click OK to close the Layer Value dialog.
+8. Click **Constant** &rarr; **Layer...** to bring up the Layer Value dialog.
+9. Enter "-45.0" for the Constant value for layer, and click **OK** to close the Layer Value dialog.
 10. Enter "2" for the Layer.
-11. Click *Constant* &rarr; **Layer...** to bring up the Layer Value dialog.
-12. Enter "-120.0" for the Constant value for layer, and click OK to close the Layer Value dialog.
+11. Click **Constant** &rarr; **Layer...** to bring up the Layer Value dialog.
+12. Enter "-120.0" for the Constant value for layer, and click **OK** to close the Layer Value dialog.
 13. Enter "3" for the Layer.
-14. Click *Constant* &rarr; **Layer...** to bring up the Layer Value dialog.
-15. Enter "-215.0" for the Constant value for layer, and click OK to close the Layer Value dialog.
-16. Click OK to exit the Bottom Elevation dialog.
+14. Click **Constant** &rarr; **Layer...** to bring up the Layer Value dialog.
+15. Enter "-215.0" for the Constant value for layer, and click **OK** to close the Layer Value dialog.
+16. Click **OK** to exit the Bottom Elevation dialog.
 17. Turn on *Starting heads equal grid top elevation* near the bottom of the dialog.
-18. Click OK to exit the MODFLOW Global/Basic Package dialog.
+18. Click **OK** to exit the MODFLOW Global/Basic Package dialog.
 
 ### 4.4 Starting Heads
 
@@ -158,19 +160,19 @@ As mentioned above, the IBOUND values can be entered through the IBOUND Array di
 
 To simplify the selection of the cells, change the display to make the leftmost layer visible.
 
-1. Turn on Ortho Mode.
-2. Switch to Side View.
+1. Turn on **Ortho Mode** ![alt text](../../icons/ortho_mode.png).
+2. Switch to **Side View** ![alt text](../../icons/side_view.png).
 
 The grid appears very thin. To make things easier, increase the Z magnification so that the grid appears stretched in the vertical direction:
 
-3. Click *Display Options* to bring up the Display Options dialog.
-4. Enter "15.0" for the Z magnification and click OK to close the Display Options dialog.
+3. Click **Display Options** ![alt text](../../icons/display_options.png) to bring up the Display Options dialog.
+4. Enter "15.0" for the Z magnification and click **OK** to close the Display Options dialog.
 
 ### 5.2 Selecting the Cells
 
 Do the following to select the cells:
 
-1. Select the *Select Cells* tool so the Mini-Grid Toolbar appears.
+1. Make sure **Ortho Mode** ![alt text](../../icons/ortho_mode.png) is still on and select the **Select Cells** ![alt text](../../icons/select_cells.png) tool so the Mini-Grid Toolbar appears.
 2. Enter "1" in the Mini-Grid Toolbar and press the Tab key.
 
 Notice column number one (the leftmost column) is now shown.
@@ -188,8 +190,8 @@ To edit the IBOUND value:
 1. Right-click on one of the selected cells and select **Properties...** to bring up the 3D Grid Cell Properties dialog.
 2. Select "Specified Head" from the drop-down in the Value column of the IBOUND row.
 3. Enter "0.0" in the Value column of the Starting head row.
-4. Click OK to exit the 3D Grid Cell Properties dialog.
-5. Switch to Plan View.
+4. Click **OK** to exit the 3D Grid Cell Properties dialog.
+5. Switch to **Plan View** ![alt text](../../icons/plan_view.png).
 
 Notice that an orange diamond symbol is displayed in the cells that were edited, indicating they are constant head cells (Figure 4).
 
@@ -207,8 +209,8 @@ To ensure that the IBOUND values were entered correctly:
 
 Note that the cells in the leftmost column in the top two layers all have a value of "-1". Most of the MODFLOW input data can be edited in GMS using either a spreadsheet dialog such as this one, or by selecting a set of cells and entering a value directly.
 
-4. Click Cancel to exit the IBOUND Array dialog.
-5. Click Cancel to exit the MODFLOW Global/Basic Package dialog.
+4. Click **Cancel** to exit the IBOUND Array dialog.
+5. Click **Cancel** to exit the MODFLOW Global/Basic Package dialog.
 
 ---
 
@@ -218,7 +220,7 @@ The next step is to enter the data for the Layer Property Flow (LPF) package. Th
 
 To enter the LPF data:
 
-1. Select *MODFLOW* | *LPF* -- **Layer Property Flow...** to bring up the LPF Package dialog.
+1. Select *MODFLOW* | **LPF** -- **Layer Property Flow...** to bring up the LPF Package dialog.
 2. In the Layer data section, enter "1" for the Layer.
 
 The options in the Layer data section are used to define the layer type and hydraulic conductivity data for each layer. This problem has three layers. The top layer is unconfined, and the bottom two layers are confined. The default Layer type in GMS is Convertible, which means the layer can be confined or unconfined. Thus, it isn't necessary to change the layer types.
@@ -230,13 +232,13 @@ The buttons on the right side of the Layer Data section are for entering the par
 First, enter the data for the top layer:
 
 1. Click **Horizontal Hydraulic Conductivity...** to bring up the Horizontal Hydraulic Conductivity dialog.
-2. Click *Constant* &rarr; *Layer* to bring up the Layer Value dialog.
-3. Enter a value of "15.0" for the Constant value for layer and click OK to close the Layer Value dialog.
-4. Click OK to exit the Horizontal Hydraulic Conductivity dialog.
+2. Click **Constant** &rarr; **Layer** to bring up the Layer Value dialog.
+3. Enter a value of "15.0" for the Constant value for layer and click **OK** to close the Layer Value dialog.
+4. Click **OK** to exit the Horizontal Hydraulic Conductivity dialog.
 5. Click **Vertical Anisotropy (Kh/Kv)...** to bring up the Vertical Anisotropy (Kh/Kv) dialog.
-6. Click *Constant* &rarr; *Layer...* to bring up the Layer Value dialog.
-7. Enter "10.0" for the Constant value for layer and click OK to close the Layer Value dialog.
-8. Click OK to exit the Vertical Anisotropy (Kh/Kv) dialog.
+6. Click **Constant** &rarr; **Layer...** to bring up the Layer Value dialog.
+7. Enter "10.0" for the Constant value for layer and click **OK** to close the Layer Value dialog.
+8. Click **OK** to exit the Vertical Anisotropy (Kh/Kv) dialog.
 
 ### 6.2 Middle Layer
 
@@ -251,7 +253,7 @@ Finally, enter the data for the bottom layer:
 
 1. In the Layer data section, enter "3" for the Layer.
 2. Repeat steps 1--8 from section 6.1, entering "2.0" for the Constant value for layer for the horizontal hydraulic conductivity and "5.0" for the Constant value for layer for the vertical anisotropy.
-3. When done, click OK to close the LPF Package dialog.
+3. When done, click **OK** to close the LPF Package dialog.
 
 ---
 
@@ -261,22 +263,20 @@ Entering data in the recharge package allows simulation of the recharge to an aq
 
 To enter the recharge data, do the following:
 
-1. Select *MODFLOW* | *Optional Packages* | *RCH* -- **Recharge...** to bring up the MODFLOW Recharge Package dialog.
-2. Click *Constant* &rarr; *Array* to bring up the Grid Value dialog.
-3. Enter "0.0009" for the Constant value for grid and click OK to close the Grid Value dialog.
-4. Click OK to exit the MODFLOW Recharge Package dialog.
+1. Select *MODFLOW* | *Optional Packages* | **RCH** -- **Recharge...** to bring up the MODFLOW Recharge Package dialog.
+2. Click **Constant** &rarr; **Array** to bring up the Grid Value dialog.
+3. Enter "0.0009" for the Constant value for grid and click **OK** to close the Grid Value dialog.
+4. Click **OK** to exit the MODFLOW Recharge Package dialog.
 
 ---
 
 ## 8 The Drain Package
 
-The next step is to define the row of drains in the top layer of the model. To define the drains, first select the cells where the drains will be located, and then select the Point Sources/Sinks command.
+The next step is to define the row of drains in the top layer of the model. To define the drains, first select the cells where the drains will be located, and then select the **Point Sources/Sinks** command.
 
 The drains are located in the top layer (layer 1). Since this is the current layer, it isn't necessary to change the view.
 
 Notice that as the cursor moves across the grid, the IJK indices of the cell beneath the cursor are displayed in the Edit Window at the bottom of the screen (Figure 5, bottom).
-
-This is the second way to create a UGrid discussed in this tutorial. There are other ways explained in the UGrid Creation tutorial. UGrids can be created so that they are refined around wells, rivers, and lakes (points, arcs, and polygons) in the conceptual model.
 
 ![Cells to be selected (top) and IJK indices of cell under cursor (bottom)](images/figure5.png)
 
@@ -284,13 +284,13 @@ This is the second way to create a UGrid discussed in this tutorial. There are o
 
 To select the cells, do the following:
 
-1. Using the *Select Cells* tool while holding down the Shift key, draw a box selecting cells 2--10 on row 8 (Figure 5, top). The first cell will indicate "IJK: 8,2,1", meaning "row 8, cell 2, layer 1" (Figure 5, bottom).
+1. Using the **Select Cells** tool while holding down the Shift key, draw a box selecting cells 2--10 on row 8 (Figure 5, top). The first cell will indicate "IJK: 8,2,1", meaning "row 8, cell 2, layer 1" (Figure 5, bottom).
 
 To assign drains to the cells:
 
 2. Right-click on one of the selected cells and select **Sources/Sinks...** to bring up the MODFLOW Sources/Sinks dialog.
 3. Select "Drain (DRN)" from the list on the left.
-4. Click Add BC to add a new instance of a drain to each of the selected cells.
+4. Click **Add BC** to add a new instance of a drain to each of the selected cells.
 
 At this point, enter an elevation and a conductance for the selected drains. The drains all have the same conductance but the elevations are not all the same.
 
@@ -308,7 +308,7 @@ At this point, enter an elevation and a conductance for the selected drains. The
 | 114 | 27.0 | 7430.0 |
 | 115 | 30.0 | 7430.0 |
 
-6. Click OK to close the MODFLOW Sources/Sinks dialog.
+6. Click **OK** to close the MODFLOW Sources/Sinks dialog.
 7. Deselect the cells by clicking anywhere outside the grid.
 
 The drains should now be marked by green circles (Figure 6).
@@ -327,31 +327,32 @@ Several wells need to be defined. Most of the wells are in the top layer but som
 
 Define the wells in the top layer (layer 1) first:
 
-1. Using the *Select Cells* tool while holding down the Ctrl key, select the cells shown in Figure 7 (the twelve cells containing yellow squares, rows indicated by red arrows). The coordinates of each well are shown in the table to the right.
+1. Using the **Select Cells** tool ![alt text](../../icons/select_cells.png) while holding down the Ctrl key, select the cells shown in Figure 7 (the twelve cells containing yellow squares, rows indicated by red arrows). The coordinates of each well are shown in the table to the right.
 
-| Well Coordinates | | |
-|---|---|---|
-| row (i) | col (j) | lay (k) |
-| 9 | 8 | 1 |
-| 9 | 10 | 1 |
-| 9 | 12 | 1 |
-| 9 | 14 | 1 |
-| 11 | 8 | 1 |
-| 11 | 10 | 1 |
-| 11 | 12 | 1 |
-| 11 | 14 | 1 |
-| 13 | 8 | 1 |
-| 13 | 10 | 1 |
-| 13 | 12 | 1 |
-| 13 | 14 | 1 |
+<table>
+  <tr><th colspan="3">Well Coordinates</th></tr>
+  <tr><th>row (i)</th><th>col (j)</th><th>lay (k)</th></tr>
+  <tr><td>9</td><td>8</td><td>1</td></tr>
+  <tr><td>9</td><td>10</td><td>1</td></tr>
+  <tr><td>9</td><td>12</td><td>1</td></tr>
+  <tr><td>9</td><td>14</td><td>1</td></tr>
+  <tr><td>11</td><td>8</td><td>1</td></tr>
+  <tr><td>11</td><td>10</td><td>1</td></tr>
+  <tr><td>11</td><td>12</td><td>1</td></tr>
+  <tr><td>11</td><td>14</td><td>1</td></tr>
+  <tr><td>13</td><td>8</td><td>1</td></tr>
+  <tr><td>13</td><td>10</td><td>1</td></tr>
+  <tr><td>13</td><td>12</td><td>1</td></tr>
+  <tr><td>13</td><td>14</td><td>1</td></tr>
+</table>
 
 2. Right-click on a selected cell and select **Sources/Sinks...** to bring up the MODFLOW Sources/Sinks dialog.
-3. Select "Wells (WEL)" from the list on the left and click the Add BC button. Twelve well entries will appear in the spreadsheet area on the right side of the dialog.
+3. Select "Wells (WEL)" from the list on the left and click the **Add BC** button. Twelve well entries will appear in the spreadsheet area on the right side of the dialog.
 4. In the All row, enter "-12230" in the Q (flow) (m^3/d) column.
 
 A negative value signifies extraction.
 
-5. Click OK to close the MODFLOW Sources/Sinks dialog.
+5. Click **OK** to close the MODFLOW Sources/Sinks dialog.
 6. Deselect the cells by clicking anywhere outside the grid.
 
 ![Rows with wells (twelve yellow squares)](images/figure7.png)
@@ -363,18 +364,19 @@ A negative value signifies extraction.
 The wells in the middle layer (layer 2) need to be defined next. First, it is necessary to view the middle layer.
 
 1. Click the Up arrow in the Mini-Grid Toolbar switch to layer 2.
-2. Using the *Select Cells* tool while holding down the Ctrl key, select the cells shown in Figure 8 (the two cells containing yellow squares, indicated by red arrows). The coordinates of each well are shown in the table to the right.
+2. Using the **Select Cells** tool while holding down the Ctrl key, select the cells shown in Figure 8 (the two cells containing yellow squares, indicated by red arrows). The coordinates of each well are shown in the table to the right.
 
-| Well Coordinates | | |
-|---|---|---|
-| row (i) | col (j) | lay (k) |
-| 4 | 6 | 2 |
-| 6 | 12 | 2 |
+<table>
+  <tr><th colspan="3">Well Coordinates</th></tr>
+  <tr><th>row (i)</th><th>col (j)</th><th>lay (k)</th></tr>
+  <tr><td>4</td><td>6</td><td>2</td></tr>
+  <tr><td>6</td><td>12</td><td>2</td></tr>
+</table>
 
 3. Right-click on a selected cell and select **Sources/Sinks...** to bring up the MODFLOW Sources/Sinks dialog.
-4. Select "Wells (WEL)" from the list on the left and click the Add BC button. Two well entries will appear in the spreadsheet area on the right side of the dialog.
+4. Select "Wells (WEL)" from the list on the left and click the **Add BC** button. Two well entries will appear in the spreadsheet area on the right side of the dialog.
 5. In the All row, enter "-12230" in the Q (flow) (m^3/d) column.
-6. Click OK to close the MODFLOW Sources/Sinks dialog.
+6. Click **OK** to close the MODFLOW Sources/Sinks dialog.
 7. Unselect the cells by clicking anywhere outside the grid.
 
 ![Well locations](images/figure8.png)
@@ -385,12 +387,12 @@ The wells in the middle layer (layer 2) need to be defined next. First, it is ne
 
 Finally, define a single well on the bottom layer (layer 3):
 
-1. Click the Up arrow in the Mini-Grid Toolbar to switch to layer 3.
-2. Using the *Select Cells* tool, select the cell shown in Figure 9 (indicated by red arrow). The coordinates of the well are "IJK: 5, 11, 3".
+1. Click the Up arrow ![alt text](../../icons/up_arrow.png) in the Mini-Grid Toolbar to switch to layer 3.
+2. Using the **Select Cells** tool ![alt text](../../icons/select_cells.png), select the cell shown in Figure 9 (indicated by red arrow). The coordinates of the well are "IJK: 5, 11, 3".
 3. Right-click on the selected cell and select **Sources/Sinks...** to bring up the MODFLOW Sources/Sinks dialog.
-4. Select "Wells (WEL)" from the list on the left and click the Add BC button. One well entry will appear in the spreadsheet area on the right side of the dialog.
+4. Select "Wells (WEL)" from the list on the left and click the **Add BC** button. One well entry will appear in the spreadsheet area on the right side of the dialog.
 5. Enter "-0.15" in the Q (flow) (m^3/d) column.
-6. Click OK to close the MODFLOW Sources/Sinks dialog.
+6. Click **OK** to close the MODFLOW Sources/Sinks dialog.
 7. Unselect the cell by clicking anywhere outside the grid.
 
 ![Location of the single well in layer 3](images/figure9.png)
@@ -399,7 +401,7 @@ Finally, define a single well on the bottom layer (layer 3):
 
 Now that all of the wells have been defined, it is possible to go back to the top layer.
 
-1. Click the down arrow twice in the Mini-Grid Toolbar to go back to layer 1.
+1. Click the down arrow twice ![alt text](../../icons/down_arrow.png) in the Mini-Grid Toolbar to go back to layer 1.
 
 ---
 
@@ -412,15 +414,15 @@ The purpose of the Model Checker is to analyze the input data currently defined 
 Do the following to run the Model Checker:
 
 1. Select *MODFLOW* | **Check Simulation...** to bring up the Model Checker dialog.
-2. Click Run Check to initiate the model check.
+2. Click **Run Check** to initiate the model check.
 
 A list of messages is shown for each of the MODFLOW input packages. If everything has been done correctly, the packages should have no errors. When an error exists, select the error in the Model Checker and GMS will select the cells or layers associated with the problem.
 
-3. When finished reviewing the results of the model check, click Done to exit the Model Checker.
+3. When finished reviewing the results of the model check, click **Done** to exit the Model Checker.
 4. Select *File* | **Save As...** to bring up the Save As dialog.
 5. Browse to the modfgrid directory.
 6. Select "Project Files (*.gpr)" from the Save as type drop-down.
-7. Enter "gridmod.gpr" as the File name and click Save to save the project and close the Save As dialog.
+7. Enter "gridmod.gpr" as the File name and click **Save** to save the project and close the Save As dialog.
 
 ---
 
@@ -428,24 +430,25 @@ A list of messages is shown for each of the MODFLOW input packages. If everythin
 
 It is now possible to run MODFLOW:
 
-1. Select *MODFLOW* | *Run MODFLOW* to bring up the MODFLOW model wrapper dialog.
+1. Select *MODFLOW* | **Run MODFLOW** to bring up the MODFLOW model wrapper dialog.
 
 The super file name is passed to MODFLOW as a command line argument. MODFLOW opens the file and begins the simulation. As the simulation proceeds, some text output in the window will report the solution progress.
 
 2. When MODFLOW finishes, turn on *Read solution on exit* and *Turn on contours* (if not on already).
-3. Click Close to exit the MODFLOW model wrapper dialog.
-4. Click *Display Options* to bring up the Display Options dialog.
-5. Select "3D Grid Data" from the list on the left.
-6. On the MODFLOW tab, click on the blue triangle button to the left of Flooded cells to bring up the Symbol Attributes dialog.
-7. Click the down-arrow button next to Color and select "Skyblue" from the list of colors.
-8. Click OK to close the Symbol Attributes dialog.
-9. Click OK to close the Display Options dialog.
+3. Click **Close** to exit the MODFLOW model wrapper dialog.
 
 ---
 
 ## 12 Viewing the Solution
 
 GMS imports the solution automatically when the MODFLOW window is closed. At this point, a set of head contours for the top layer should be seen. Some cells containing a light blue triangle symbol will also be visible (top right in Figure 10). These cells are flooded, meaning the computed water table is above the top of the cell.
+
+1. Click **Display Options** ![alt text](../../icons/display_options.png) to bring up the Display Options dialog.
+2. Select "3D Grid Data" from the list on the left.
+3. On the MODFLOW tab, click on the blue triangle button to the left of Flooded cells to bring up the Symbol Attributes dialog.
+4. Click the down-arrow button next to Color and select "Skyblue" from the list of colors.
+5. Click **OK** to close the Symbol Attributes dialog.
+6. Click **OK** to close the Display Options dialog.
 
 ![Contours, with flooded cells at top right](images/figure10.png)
 
@@ -455,8 +458,8 @@ GMS imports the solution automatically when the MODFLOW window is closed. At thi
 
 View the solutions on the middle and bottom layers by doing the following:
 
-1. Click the up arrow in the Mini-Grid Toolbar to go to layer 2 (one click) or layer 3 (two clicks).
-2. When finished viewing the middle and bottom layer solutions, use the down arrow to return to layer 1.
+1. Click the up arrow ![alt text](../../icons/up_arrow.png) in the Mini-Grid Toolbar to go to layer 2 (one click) or layer 3 (two clicks).
+2. When finished viewing the middle and bottom layer solutions, use the down arrow ![alt text](../../icons/down_arrow.png) to return to layer 1.
 
 ### 12.2 Color Fill Contours and Color Legend
 
@@ -465,7 +468,7 @@ It is also possible to display the contours using a color fill option.
 1. Select *Display* | **Contour Options...** to bring up the Dataset Contour Options -- 3D Grid -- Head dialog.
 2. In the Contour method section, select "Color Fill" from the top drop-down.
 3. At the bottom left, turn on Legend.
-4. Click OK to close the Dataset Contour Options -- 3D Grid -- Head dialog.
+4. Click **OK** to close the Dataset Contour Options -- 3D Grid -- Head dialog.
 
 The Graphics Window should appear similar to Figure 11.
 
@@ -483,12 +486,12 @@ Zone Budget is a program developed by the U.S. Geological Survey (USGS) to compu
 
 In this model, make each layer into a zone.
 
-1. Switch to Plan View.
-2. Use the up or down arrows on the Mini-Grid Toolbar to switch to layer 2 of the grid.
-3. Using the *Select Cells* tool, drag a box around all of the cells in layer 2 of the grid.
+1. Switch to **Plan View** ![alt text](../../icons/plan_view.png).
+2. Use the up ![alt text](../../icons/up_arrow.png) or down ![alt text](../../icons/down_arrow.png) arrows on the Mini-Grid Toolbar to switch to layer 2 of the grid.
+3. Using the **Select Cells** tool ![alt text](../../icons/select_cells.png), drag a box around all of the cells in layer 2 of the grid.
 4. Right-click on one of the selected cells and select **Properties...** to bring up the 3D Grid Cell Properties dialog.
 5. Enter "2" for the Zone budget ID.
-6. Click OK to close the 3D Grid Cell Properties dialog.
+6. Click **OK** to close the 3D Grid Cell Properties dialog.
 7. Use the Mini-Grid Toolbar to switch to layer 3 of the grid.
 8. Repeat steps 3 through 6, entering "3" for the Zone budget ID.
 
@@ -502,7 +505,7 @@ It is now possible to view the flow budget for each of the zones.
 Currently, the report is showing information for the first zone (the top layer of the grid). The report is divided into two sections: flow into the zone and flow out of the zone. Every source/sink present in the model is listed in the report with a flow value. In addition to the sources/sinks, there is a field for the amount of flow that goes between zones.
 
 3. View the reports for the other two zones by selecting the desired zone from the Zone drop-down.
-4. When finished, click OK to exit the Flow Budget dialog.
+4. When finished, click **OK** to exit the Flow Budget dialog.
 
 ---
 
@@ -515,4 +518,4 @@ This concludes the "MODFLOW -- Grid Approach" tutorial. The following topics wer
 - Most MODFLOW array data can be edited in two ways: via a spreadsheet or by selecting grid cells and using the *MODFLOW* | *Advanced* | **Cell Properties...** command.
 - Wells, drains, etc. can be created and edited by selecting the grid cell(s) and choosing the *MODFLOW* | *Advanced* | **Sources/Sinks...** command or by right-clicking on a selected cell and selecting the **Sources/Sinks...** command from the pop up menu.
 - The Model Checker can be used to analyze the input data and check for errors.
-- A flow budget report can be generated for a sub-region of the model by assigning Zone budget IDs to the grid and then using the Flow Budget command.
+- A flow budget report can be generated for a sub-region of the model by assigning Zone budget IDs to the grid and then using the **Flow Budget** command.

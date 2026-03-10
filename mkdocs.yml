@@ -9,7 +9,7 @@ theme:
 nav:
   - Home: index.md
   - MODFLOW:
-    - Grid Approach: modflow/grid/MODFLOW-GridApproach.md
+    - Grid Approach: modflow/MODFLOW-GridApproach/index.md
 
 # Plugins
 plugins:
@@ -18,6 +18,8 @@ plugins:
 # Markdown extensions
 markdown_extensions:
   - admonition
+  - attr_list
   - codehilite
+  - sane_lists
   - toc:
       permalink: true
