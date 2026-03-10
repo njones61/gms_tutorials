@@ -10,6 +10,7 @@ nav:
   - Home: index.md
   - MODFLOW:
     - Grid Approach: modflow/MODFLOW-GridApproach/index.md
+    - Conceptual Model Approach 1: modflow/MODFLOW-ConceptualModelApproach1/index.md
 
 # Plugins
 plugins:

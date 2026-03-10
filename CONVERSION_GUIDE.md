@@ -36,6 +36,50 @@ docs/<category>/<TutorialName>/
 - Crop images accurately — do not lose parts of figures
 - If images extract poorly from `.docx`, check for a parallel `.pdf` file and extract from that instead
 
+### Handling OLE-Embedded and WMF Images
+Some Word documents contain figures embedded as OLE objects or WMF (Windows Metafile) files rather than standard inline images. These cannot be extracted directly with `python-docx` or converted on macOS without specialized tools.
+
+**How to identify them:** Look for `w:object` elements containing `v:shape` with `v:imagedata` referencing a `.wmf` file. These are typically older diagrams or figures created in legacy Word versions. They will be missing from the normal inline image extraction and will show up as empty paragraphs adjacent to a `Caption`-style paragraph.
+
+**Detection method using python-docx:**
+```python
+from lxml import etree
+
+ns_v = 'urn:schemas-microsoft-com:vml'
+ns_r = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+
+for i, para in enumerate(doc.paragraphs):
+    objects = para._element.findall(f'.//{{{ns_v}}}imagedata')
+    for obj in objects:
+        rId = obj.get(f'{{{ns_r}}}id')
+        rel = doc.part.rels[rId]
+        content_type = rel.target_part.content_type
+        print(f"P{i}: OLE/VML image rId={rId}, type={content_type}")
+```
+
+**Strategy when extraction fails:**
+1. Reserve the correct figure number in the sequence (do not skip it or renumber other figures).
+2. Use a placeholder in the markdown:
+   ```markdown
+   ![PLACEHOLDER - Plan view of site to be modeled](images/figure1.png)
+
+   *Figure 1: Plan view of site to be modeled*
+   ```
+3. Create a simple placeholder image file so the build doesn't break:
+   ```python
+   from PIL import Image, ImageDraw, ImageFont
+   img = Image.new('RGB', (800, 400), 'white')
+   draw = ImageDraw.Draw(img)
+   draw.rectangle([10, 10, 790, 390], outline='red', width=3)
+   draw.text((200, 180), "PLACEHOLDER: Figure N", fill='red')
+   img.save('images/figureN.png')
+   ```
+4. Add a comment in the markdown near the placeholder:
+   ```markdown
+   <!-- TODO: Figure N requires manual extraction (OLE/WMF embedded object) -->
+   ```
+5. The user can then provide the correct image by opening the Word doc in Word/LibreOffice, copying the figure, and saving it as PNG. Replace the placeholder file with the real image and remove the comment and "PLACEHOLDER" prefix from the alt text.
+
 ### Extracting Inline Icons
 The Word documents contain small inline icons (tool buttons, view mode icons, arrows) embedded directly in the text next to the tool/button names. These must be extracted and placed in the markdown.
 
@@ -267,3 +311,4 @@ The following extensions are enabled in `mkdocs.yml`:
 4. **Extraneous content** — Do not add text that isn't in the source document. No UGrid references in a Grid Approach tutorial, etc.
 5. **Bold vs italic confusion** — The distinction matters for these tutorials. When in doubt, check the Word doc's run-level formatting.
 6. **Em-dashes** — Use `--` for en-dashes in markdown (e.g., "35--55 minutes", "MODFLOW -- Grid Approach").
+7. **OLE/WMF figures** — Some figures (especially older diagrams) are embedded as OLE objects with WMF images. These won't appear in normal inline image extraction. Always verify the extracted figure count matches the caption count in the Word doc. If a figure is missing, check for `w:object` / `v:imagedata` elements and follow the placeholder strategy in "Handling OLE-Embedded and WMF Images" above.
